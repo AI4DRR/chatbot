@@ -1,0 +1,56 @@
+# Docker Compose for DEVELOPMENT
+# Use: docker-compose up
+# For production, use: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  # Application service: V1 frontend at "/" + FastAPI at "/api/*" (one origin)
+  chatbot-app:
+    image: undrr-chatbot:dev
+    build: .
+    container_name: undrr-chatbot-dev
+    working_dir: /data
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql://undrr:undrrpassword@postgres:5432/undrr_chat
+    volumes:
+      - ./app:/data/app
+      - ./frontend:/data/frontend
+      - ./postgres_init:/data/postgres_init:ro   # startup migrations (002+, idempotent) follow edits without a rebuild
+      - ./chat_session:/data/chat_session
+      - ./logs:/data/logs
+    ports:
+      - "8084:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - undrr-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # PostgreSQL with pgvector
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: undrr-chatbot-postgres
+    environment:
+      POSTGRES_USER: undrr
+      POSTGRES_PASSWORD: undrrpassword
+      POSTGRES_DB: undrr_chat
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./postgres_init:/docker-entrypoint-initdb.d
+    # No host port: the app reaches Postgres over the Compose network as `postgres:5432`.
+    # For host-side tools add a local override, e.g. docker-compose.override.yml with
+    #   services: { postgres: { ports: ["5433:5432"] } }
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U undrr"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - undrr-network
+
+networks:
+  undrr-network:
+    driver: bridge

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot Management — Users (UX template v1)</title>
+  <meta name="description" content="Design template: invitation-only user management for the AI4DRR Chatbot. Mock data only; no backend." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-body">
+
+  <!-- Template-only notice. The invitation backend (invite / resend / revoke / disable) does not exist yet;
+       every action on this page only changes the mock data in the browser. -->
+  <div class="tpl-banner" role="note">
+    <strong>Design template.</strong> Invitation backend not implemented — actions here change mock data only.
+  </div>
+
+  <div class="admin" id="admin">
+
+    <!-- ================= LEFT: management navigation ================= -->
+    <aside class="admin-nav" aria-label="Chatbot management">
+      <div class="sidebar-head">
+        <a class="brand" href="index.html" aria-label="AI4DRR Chatbot">
+          <span class="brand-text"><span class="wm-name">AI4DRR</span> <span class="wm-product">Chatbot</span></span>
+        </a>
+      </div>
+      <p class="admin-nav-title">Chatbot Management</p>
+      <nav class="admin-menu">
+        <a class="admin-menu-item is-active" href="#" aria-current="page">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 16.5c.8-3 3.1-4.5 6-4.5s5.2 1.5 6 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Users</span>
+        </a>
+      </nav>
+      <div class="sidebar-foot">
+        <a class="admin-back" href="index.html">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to chatbot
+        </a>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN: users ================= -->
+    <main class="admin-main">
+      <header class="admin-head">
+        <div>
+          <h1 class="admin-title">Users</h1>
+          <p class="admin-sub">Access to the AI4DRR Chatbot is by invitation only. Invite a colleague by email; they complete their own profile and password from the secure link.</p>
+        </div>
+        <button class="btn btn-primary admin-primary" id="inviteBtn" type="button">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Invite User
+        </button>
+      </header>
+
+      <div class="admin-tabs" role="tablist" aria-label="User lists">
+        <button class="admin-tab is-active" id="tabActive" role="tab" type="button" aria-selected="true" aria-controls="panelActive" data-tab="active">
+          Active <span class="tab-count" id="countActive">0</span>
+        </button>
+        <button class="admin-tab" id="tabPending" role="tab" type="button" aria-selected="false" aria-controls="panelPending" data-tab="pending">
+          Pending <span class="tab-count" id="countPending">0</span>
+        </button>
+      </div>
+
+      <!-- Active users -->
+      <section class="admin-panel" id="panelActive" role="tabpanel" aria-labelledby="tabActive">
+        <table class="admin-table" aria-label="Active users">
+          <thead>
+            <tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Department</th><th scope="col" class="col-actions">Actions</th></tr>
+          </thead>
+          <tbody id="activeRows"><!-- rendered by admin.js from mock data --></tbody>
+        </table>
+        <p class="admin-empty" id="activeEmpty" hidden>No active users yet.</p>
+      </section>
+
+      <!-- Pending invitations -->
+      <section class="admin-panel" id="panelPending" role="tabpanel" aria-labelledby="tabPending" hidden>
+        <table class="admin-table" aria-label="Pending invitations">
+          <thead>
+            <tr><th scope="col">Email</th><th scope="col">Invited</th><th scope="col">Expires</th><th scope="col" class="col-actions">Actions</th></tr>
+          </thead>
+          <tbody id="pendingRows"><!-- rendered by admin.js from mock data --></tbody>
+        </table>
+        <p class="admin-empty" id="pendingEmpty" hidden>No pending invitations. Invitations expire 24 hours after they are sent.</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= Invite User dialog ================= -->
+  <div class="modal-scrim" id="inviteScrim" hidden></div>
+  <div class="modal" id="inviteModal" role="dialog" aria-modal="true" aria-labelledby="inviteTitle" hidden>
+    <form class="modal-form" id="inviteForm" novalidate>
+      <h2 class="modal-title" id="inviteTitle">Invite User</h2>
+      <p class="modal-sub">The user will receive a secure link to complete their profile and set a password. The invitation expires in 24 hours.</p>
+      <div class="field">
+        <label for="inviteEmail">Email address <span class="required" aria-hidden="true">*</span></label>
+        <input id="inviteEmail" name="email" type="email" autocomplete="off" placeholder="name@example.org" required />
+      </div>
+      <p class="auth-error" id="inviteError" role="alert" hidden></p>
+      <div class="modal-actions">
+        <button class="btn" id="inviteCancel" type="button">Cancel</button>
+        <button class="btn btn-primary" id="inviteSubmit" type="submit">Send invitation</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Transient confirmation (template-only) -->
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

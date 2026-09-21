@@ -1,0 +1,232 @@
+{
+  "description": "Chatbot flow regression set (docs/chatbot-flow-improvement-plan.md Task 5). Each case is a script of turns run in one fresh session. Expectations are loose, machine-checkable properties; answer quality is read by a human from the table. topic_changed / memory_summary_present expectations exist from Phase 2.",
+  "cases": [
+    {
+      "id": "direct-good-kb",
+      "kind": "direct, good KB",
+      "turns": [
+        {
+          "message": "What is the Early Warnings for All initiative?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "direct-list",
+      "kind": "direct, list",
+      "turns": [
+        {
+          "message": "List the four priorities for action of the Sendai Framework.",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "direct-compare",
+      "kind": "direct, compare",
+      "turns": [
+        {
+          "message": "Compare the Sendai Framework with the Hyogo Framework for Action.",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "direct-poor-kb",
+      "kind": "direct, poor KB",
+      "turns": [
+        {
+          "message": "What is the population of Nepal?",
+          "expect": {
+            "sources_max": 0,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "unsupported",
+      "kind": "unsupported",
+      "turns": [
+        {
+          "message": "Who is the current head of ICT at UNDRR?",
+          "expect": {
+            "sources_max": 0,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "followup-contextual",
+      "kind": "contextual follow-up",
+      "turns": [
+        {
+          "message": "What is the Early Warnings for All initiative?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "How about financing?",
+          "reference": "How is the Early Warnings for All initiative financed?",
+          "expect": {
+            "shares_source_with_reference": true,
+            "topic_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "followup-vague",
+      "kind": "vague follow-up",
+      "turns": [
+        {
+          "message": "What are the four priorities for action of the Sendai Framework?",
+          "expect": {
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "Which one matters most for cities?",
+          "reference": "Which Sendai Framework priority for action matters most for cities and urban resilience?",
+          "expect": {
+            "shares_source_with_reference": true,
+            "topic_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "followup-short",
+      "kind": "short follow-up",
+      "turns": [
+        {
+          "message": "What is the Global Assessment Report on Disaster Risk Reduction (GAR)?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "When was the latest one published?",
+          "reference": "When was the latest Global Assessment Report on Disaster Risk Reduction (GAR) published?",
+          "expect": {
+            "shares_source_with_reference": true,
+            "topic_changed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "topic-switch",
+      "kind": "topic switch",
+      "turns": [
+        {
+          "message": "What do we know about flood risk in South-East Asia?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "Now tell me about drought in the Sahel.",
+          "expect": {
+            "sources_min": 1,
+            "no_shared_source_with_turn": 1,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "topic-switch-return",
+      "kind": "switch then return",
+      "turns": [
+        {
+          "message": "What do we know about flood risk in South-East Asia?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "Now tell me about drought in the Sahel.",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "Back to the floods - what early warning systems exist for them?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "long-conversation",
+      "kind": "long conversation (memory)",
+      "turns": [
+        {
+          "message": "What is urban resilience in the context of disaster risk reduction?",
+          "expect": {
+            "sources_min": 1,
+            "topic_changed": true
+          }
+        },
+        {
+          "message": "Which cities are often cited as examples of resilience planning?",
+          "expect": {}
+        },
+        {
+          "message": "How does the Making Cities Resilient 2030 initiative support them?",
+          "expect": {}
+        },
+        {
+          "message": "What role do local governments play?",
+          "expect": {}
+        },
+        {
+          "message": "And how is progress measured?",
+          "expect": {
+            "topic_changed": false
+          }
+        },
+        {
+          "message": "What about financing for city-level resilience?",
+          "expect": {}
+        },
+        {
+          "message": "Are there examples from Africa?",
+          "expect": {}
+        },
+        {
+          "message": "What are the main barriers cities face?",
+          "expect": {
+            "memory_summary_present": true
+          }
+        },
+        {
+          "message": "Earlier you mentioned example cities - which ones were they, and how does that connect to the barriers?",
+          "expect": {
+            "topic_changed": false,
+            "memory_summary_present": true
+          }
+        }
+      ]
+    }
+  ]
+}

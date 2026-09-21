@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account setup — AI4DRR Chatbot (UX template v1)</title>
+  <meta name="description" content="Design template: the account-setup screen an invited user reaches from their invitation link. Mock only; no backend." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body data-state="login">
+
+  <!-- Template-only notice: the invitation link, its validation and the account creation do not exist yet.
+       Preview states: ?state=form (default) | ?state=success | ?state=invalid -->
+  <div class="tpl-banner" role="note">
+    <strong>Design template.</strong> Invitation backend not implemented — the form only switches to the success state locally.
+  </div>
+
+  <!-- Same centred entry layout as the sign-in screen (styles.css .login). -->
+  <section class="login setup" aria-labelledby="setupTitle">
+    <div class="login-inner">
+      <h1 class="login-wordmark"><span class="wm-name">AI4DRR</span><span class="wm-product">Chatbot</span></h1>
+
+      <!-- State: the form (valid invitation) -->
+      <div class="auth-view" id="setupForm">
+        <h2 class="auth-heading" id="setupTitle">Set up your account</h2>
+        <p class="login-sub">You have been invited to the AI4DRR Chatbot. Complete your profile and choose a password to finish.</p>
+        <form class="auth-form" id="form" novalidate>
+          <div class="field field-readonly">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="fatima.haddad@example.org" readonly aria-readonly="true" />
+            <p class="field-hint">Fixed by your invitation. This will be your sign-in email.</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="firstName">First name <span class="required" aria-hidden="true">*</span></label>
+              <input id="firstName" name="first_name" type="text" autocomplete="given-name" required />
+            </div>
+            <div class="field">
+              <label for="lastName">Last name <span class="required" aria-hidden="true">*</span></label>
+              <input id="lastName" name="last_name" type="text" autocomplete="family-name" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="department">Department <span class="optional">(optional)</span></label>
+            <input id="department" name="department" type="text" autocomplete="organization" placeholder="e.g. UNDRR" />
+          </div>
+          <div class="field">
+            <label for="password">Password <span class="required" aria-hidden="true">*</span></label>
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+            <p class="field-hint">At least 8 characters.</p>
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm password <span class="required" aria-hidden="true">*</span></label>
+            <input id="confirm" name="confirm_password" type="password" autocomplete="new-password" required />
+          </div>
+          <p class="auth-error" id="error" role="alert" hidden></p>
+          <button class="auth-btn" id="submit" type="submit">
+            <span class="auth-btn-label">Complete account setup</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Setting up…</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- State: success -->
+      <div class="auth-view setup-success" id="setupSuccess" hidden>
+        <div class="check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M5 10.5l3.5 3.5L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2 class="auth-heading">Account setup complete</h2>
+        <p class="login-sub">Your AI4DRR Chatbot account is ready.</p>
+        <a class="auth-btn" href="index.html">Continue to AI4DRR Chatbot</a>
+      </div>
+
+      <!-- State: invalid or expired link -->
+      <div class="auth-view setup-success" id="setupInvalid" hidden>
+        <h2 class="auth-heading">This invitation link is not valid</h2>
+        <p class="login-sub">The link may have expired (invitations last 24 hours) or already been used. Ask an AI4DRR Chatbot administrator for a new invitation.</p>
+        <a class="auth-btn" href="index.html">Go to sign in</a>
+      </div>
+    </div>
+    <p class="login-foot">© UNDRR · AI4DRR Chatbot (preview)</p>
+  </section>
+
+  <script>
+    /* Template-only behaviour: client-side checks, then the success state. No request is made. */
+    (function () {
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      const show = (id) => ['setupForm', 'setupSuccess', 'setupInvalid'].forEach((v) => { $(v).hidden = v !== id; });
+      const state = new URLSearchParams(location.search).get('state');
+      if (state === 'success') show('setupSuccess');
+      else if (state === 'invalid') show('setupInvalid');
+      $('form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const f = $('form'); const err = $('error'); err.hidden = true;
+        if (!f.first_name.value.trim() || !f.last_name.value.trim()) { err.textContent = 'First name and last name are required.'; err.hidden = false; return; }
+        if (f.password.value.length < 8) { err.textContent = 'Use at least 8 characters for your password.'; err.hidden = false; return; }
+        if (f.password.value !== f.confirm_password.value) { err.textContent = 'Passwords do not match.'; err.hidden = false; return; }
+        $('submit').disabled = true; $('submit').classList.add('is-busy');
+        setTimeout(() => { $('submit').disabled = false; $('submit').classList.remove('is-busy'); show('setupSuccess'); }, 900);
+      });
+    })();
+  </script>
+</body>
+</html>

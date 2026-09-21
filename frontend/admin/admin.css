@@ -1,0 +1,122 @@
+/* =========================================================================
+   Chatbot Management (admin) — served copy of the V1 template stylesheet
+   Extends /styles.css (tokens, .btn, .field, .auth-*, .login). Same quiet
+   neutral surfaces; UNDRR blue only for the primary action and links.
+   ========================================================================= */
+
+/* (served copy: no template banner) */
+
+/* ---- Management shell: fixed left nav + main column, one page scroll ---- */
+.admin-body { background: var(--bg-app); }
+.admin { position: relative; min-height: 100dvh; }
+.admin-nav {
+  position: fixed; top: 0; bottom: 0; left: 0; z-index: 30; width: var(--sidebar-w);
+  display: flex; flex-direction: column; background: var(--bg-panel); border-right: 1px solid var(--border);
+}
+.admin-nav-title { margin: 8px 16px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.admin-menu { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; flex: 1; }
+.admin-menu-item {
+  display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: var(--radius-sm);
+  color: var(--ink-700); text-decoration: none; font-size: 14px; font-weight: 500;
+}
+.admin-menu-item:hover { background: var(--ink-100); }
+.admin-menu-item.is-active { background: var(--ink-100); color: var(--ink-900); font-weight: 600; }
+.admin-menu-item svg { width: 18px; height: 18px; }
+.admin-back { display: inline-flex; align-items: center; gap: 6px; padding: 12px 16px; color: var(--ink-700); font-size: 13px; text-decoration: none; }
+.admin-back:hover { color: var(--ink-900); }
+.admin-back svg { width: 16px; height: 16px; }
+
+.admin-main { margin-left: var(--sidebar-w); padding: 28px 32px 48px; max-width: 1080px; }
+.admin-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+.admin-title { margin: 0 0 6px; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+.admin-sub { margin: 0; max-width: 560px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+.admin-primary { display: inline-flex; align-items: center; gap: 8px; height: 38px; flex: none; }
+.admin-primary svg { width: 16px; height: 16px; }
+
+/* Tabs */
+.admin-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.admin-tab {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px;
+  border: 0; background: transparent; color: var(--ink-700); font-size: 14px; font-weight: 500;
+}
+.admin-tab:hover { color: var(--ink-900); }
+.admin-tab.is-active { color: var(--ink-900); font-weight: 600; }
+.admin-tab.is-active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 2px; background: var(--ink-900); }
+.tab-count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--ink-100); color: var(--ink-700); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.admin-tab.is-active .tab-count { background: var(--ink-900); color: var(--white); }
+
+/* Table */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.admin-table th { text-align: left; padding: 8px 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.admin-table td { padding: 12px; border-bottom: 1px solid var(--border-soft); vertical-align: middle; }
+.admin-table tr:hover td { background: var(--ink-50); }
+.col-actions { text-align: right; width: 1%; white-space: nowrap; }
+.admin-table td.col-actions { text-align: right; }
+.cell-name { font-weight: 600; color: var(--ink-900); }
+.cell-muted { color: var(--text-muted); }
+.row-actions { display: inline-flex; gap: 6px; }
+.btn-sm { height: 30px; padding: 0 10px; font-size: 13px; font-weight: 600; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:disabled:hover { background: var(--white); }
+.btn-primary:disabled:hover { background: var(--accent); }
+.btn-danger { color: var(--red-600); }
+.btn-danger:hover { background: var(--red-50) !important; border-color: #f0c9c5; }
+.status-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--amber-50); color: var(--amber-600); }
+.status-pill.expired { background: var(--red-50); color: var(--red-600); }
+.status-pill.disabled { background: var(--ink-100); color: var(--ink-500); }
+.admin-empty { padding: 32px 12px; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+/* Invite dialog */
+.modal-scrim { position: fixed; inset: 0; z-index: 80; background: rgba(0, 0, 0, 0.35); }
+.modal {
+  position: fixed; z-index: 90; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(440px, calc(100vw - 32px)); padding: 24px; border-radius: var(--radius);
+  background: var(--white); box-shadow: var(--shadow-2);
+}
+.modal-form { display: flex; flex-direction: column; gap: 14px; }
+.modal-title { margin: 0; font-size: 18px; font-weight: 700; }
+.modal-sub { margin: -6px 0 0; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.required { color: var(--red-600); }
+.detail-list { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; font-size: 14px; }
+.detail-list dt { color: var(--text-muted); }
+.detail-list dd { margin: 0; color: var(--ink-900); overflow-wrap: anywhere; }
+.status-pill.enabled { background: var(--green-50); color: var(--green-600); }
+tr.is-disabled .cell-name, tr.is-disabled td { color: var(--ink-500); }
+
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 95;
+  padding: 10px 14px; border-radius: 999px; background: var(--ink-900); color: var(--white); font-size: 13px; box-shadow: var(--shadow-2);
+}
+
+/* ---- Account setup (invitation link) ---- */
+.setup .login-inner { max-width: 420px; }
+.setup .auth-form { margin-top: 4px; }
+.field-readonly input { background: var(--ink-50); color: var(--ink-700); }
+.field-hint { margin: -2px 0 0; font-size: 12px; color: var(--text-muted); }
+.setup-success { text-align: center; }
+.setup-success .check { width: 52px; height: 52px; margin: 4px auto 14px; border-radius: 50%; background: var(--green-50); color: var(--green-600); display: flex; align-items: center; justify-content: center; }
+.setup-success .check svg { width: 26px; height: 26px; }
+
+/* ---- Responsive: nav becomes a top bar ---- */
+@media (max-width: 900px) {
+  .admin-nav { position: static; width: auto; flex-direction: row; align-items: center; gap: 8px; border-right: 0; border-bottom: 1px solid var(--border); padding-right: 8px; }
+  .admin-nav .sidebar-head { padding: 10px 12px; }
+  .admin-nav-title { display: none; }
+  .admin-menu { flex-direction: row; padding: 0; flex: 1; }
+  .admin-nav .sidebar-foot { border: 0; padding: 0; }
+  .admin-main { margin-left: 0; padding: 20px 16px 40px; }
+  .admin-head { flex-direction: column; }
+  .admin-table thead { display: none; }
+  .admin-table tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .admin-table td { display: block; padding: 3px 4px; border: 0; }
+  .admin-table td.col-actions { text-align: left; padding-top: 8px; }
+  .admin-table tr:hover td { background: transparent; }
+}
+
+/* ---- Admin sign-in doorway (/admin/login design target) ---- */
+.admin-login-area { margin: -6px 0 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.admin-login .auth-heading { margin-bottom: 16px; }
+.admin-login-back { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; color: var(--ink-700); font-size: 13px; text-decoration: none; }
+.admin-login-back:hover { color: var(--ink-900); text-decoration: underline; }
+.admin-login-back svg { width: 16px; height: 16px; }

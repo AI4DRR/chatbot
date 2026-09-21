@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI4DRR Chatbot — UX template v1</title>
+  <meta name="description" content="Static UX template: ChatGPT-style chat with left history sidebar and a Copilot-style sources panel on the right. Mock data only." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-state="conversation">
+
+  <!-- ================= LOGIN (entry state, mock auth) =================
+       Two views: sign-in (SSO + optional local form) and reset. Invitation-only:
+       there is no self-registration; see admin-users.html and account-setup.html.
+       Everything marked data-local-auth-only is shown only while
+       body[data-local-auth="on"] (mock of a future LOCAL_AUTH_ENABLED setting). -->
+  <section class="login" id="login" aria-labelledby="loginTitle" hidden>
+    <div class="login-inner">
+      <h1 id="loginTitle" class="login-wordmark"><span class="wm-name">AI4DRR</span><span class="wm-product">Chatbot</span></h1>
+
+      <!-- View: sign in -->
+      <div class="auth-view" id="authSignIn">
+        <p class="login-sub">Sign in to access the AI4DRR Chatbot using your organizational account.</p>
+        <button class="sso-btn" id="ssoBtn" type="button">
+          <span class="sso-btn-label">
+            <svg class="ms-glyph" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6.5" height="6.5"/><rect x="10.5" y="3" width="6.5" height="6.5"/><rect x="3" y="10.5" width="6.5" height="6.5"/><rect x="10.5" y="10.5" width="6.5" height="6.5"/></svg>
+            Sign in with Microsoft
+          </span>
+          <span class="sso-btn-busy" aria-hidden="true"><i class="spinner"></i> Signing in…</span>
+        </button>
+
+        <div class="auth-or" data-local-auth-only role="separator" aria-label="or"><span>or</span></div>
+
+        <form class="auth-form" id="localForm" data-local-auth-only novalidate>
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="name@example.org" required />
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <p class="auth-error" id="localError" role="alert" hidden></p>
+          <button class="auth-btn" id="localSubmit" type="submit">
+            <span class="auth-btn-label">Sign in</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Signing in…</span>
+          </button>
+          <div class="auth-links">
+            <a href="#" data-auth-view="reset">Forgot password?</a>
+          </div>
+        </form>
+
+        <p class="login-note">Access is by invitation only. Accounts are created by the AI4DRR Chatbot administrators.</p>
+      </div>
+
+      <!-- View: reset password (local auth only) -->
+      <div class="auth-view" id="authReset" data-local-auth-only hidden>
+        <h2 class="auth-heading">Reset your password</h2>
+        <p class="login-sub">Enter your email and we will send you a link to choose a new password.</p>
+        <form class="auth-form" id="resetForm" novalidate>
+          <div class="field">
+            <label for="resetEmail">Email</label>
+            <input id="resetEmail" name="email" type="email" autocomplete="username" placeholder="name@example.org" required />
+          </div>
+          <p class="auth-error" id="resetError" role="alert" hidden></p>
+          <p class="auth-success" id="resetDone" role="status" hidden>If an account exists for that email, a reset link is on its way.</p>
+          <button class="auth-btn" id="resetSubmit" type="submit">
+            <span class="auth-btn-label">Send reset link</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Sending…</span>
+          </button>
+          <div class="auth-links">
+            <a href="#" data-auth-view="signin">Back to sign in</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <p class="login-foot">© UNDRR · AI4DRR Chatbot (preview)</p>
+  </section>
+
+  <div class="app" id="app">
+
+    <!-- ================= LEFT: conversation history ================= -->
+    <aside class="sidebar" id="sidebar" aria-label="Conversation history">
+      <div class="sidebar-head">
+        <a class="brand" href="#" aria-label="AI4DRR Chatbot home">
+          <span class="brand-text"><span class="wm-name">AI4DRR</span> <span class="wm-product">Chatbot</span></span>
+        </a>
+        <button class="icon-btn" id="sidebarCollapse" type="button" title="Collapse history" aria-label="Collapse history panel" aria-controls="sidebar" aria-expanded="true">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v12" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+
+      <button class="new-chat" id="newChatBtn" type="button">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>New chat</span>
+      </button>
+
+      <div class="sidebar-search">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="search" placeholder="Search conversations" aria-label="Search conversations" />
+      </div>
+
+      <nav class="history" id="history" aria-label="Previous conversations">
+        <!-- rendered by app.js from mock-data.js -->
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="user-chip" title="Signed-in user (mock)">
+          <span class="avatar" aria-hidden="true">AM</span>
+          <span class="user-meta">
+            <span class="user-name">Amina Mwangi</span>
+            <span class="user-org">UNDRR · ROAP</span>
+          </span>
+          <button class="icon-btn signout" id="signOut" type="button" title="Sign out (mock)" aria-label="Sign out">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h4M12 14l4-4-4-4M16 10H8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= CENTER: chat ================= -->
+    <main class="chat" id="chat">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn" id="sidebarOpen" type="button" title="Show history" aria-label="Show history panel" aria-controls="sidebar">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h1 class="topbar-title" id="chatTitle">New chat</h1>
+        </div>
+        <div class="topbar-right">
+          <button class="pill-btn" id="sourcesToggle" type="button" aria-controls="sources" aria-expanded="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h9l3 3v9H4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 9h6M7 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>Sources</span>
+            <span class="count" id="sourcesCount">0</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="thread-wrap" id="threadWrap">
+        <!-- Welcome / empty state -->
+        <section class="welcome" id="welcome" aria-label="Start a conversation">
+          <div class="welcome-inner">
+            <h2>What would you like to know about disaster risk reduction?</h2>
+            <p>Answers are grounded in UNDRR and PreventionWeb knowledge, with sources you can check. The assistant does not give personal legal, medical or financial advice.</p>
+            <div class="suggestions" id="suggestions">
+              <!-- rendered by app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Conversation thread -->
+        <div class="thread" id="thread" aria-live="polite">
+          <!-- rendered by app.js -->
+        </div>
+      </div>
+
+      <div class="composer-wrap">
+        <form class="composer" id="composer" autocomplete="off">
+          <label class="sr-only" for="composerInput">Message</label>
+          <textarea id="composerInput" rows="1" placeholder="Ask about disaster risk reduction…"></textarea>
+          <div class="composer-actions">
+            <span class="composer-hint">Enter to send · Shift+Enter for a new line</span>
+            <button class="send-btn" id="sendBtn" type="submit" aria-label="Send message">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V4M5 9l5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+        <p class="composer-disclaimer">The AI4DRR Chatbot can make mistakes. Check the sources before relying on an answer.</p>
+      </div>
+    </main>
+
+    <!-- ================= RIGHT: sources / citations ================= -->
+    <aside class="sources" id="sources" aria-label="Sources and citations" aria-hidden="true">
+      <div class="sources-head">
+        <div>
+          <h2>Sources</h2>
+          <p class="sources-sub" id="sourcesSub">For the latest answer</p>
+        </div>
+        <button class="icon-btn" id="sourcesClose" type="button" title="Close sources" aria-label="Close sources panel">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="sources-filter" role="group" aria-label="Filter sources">
+        <button type="button" class="chip is-on" data-filter="all">All</button>
+        <button type="button" class="chip" data-filter="KB">Knowledge base</button>
+        <button type="button" class="chip" data-filter="WEB">Web</button>
+      </div>
+      <ol class="source-list" id="sourceList">
+        <!-- rendered by app.js -->
+      </ol>
+      <div class="sources-empty" id="sourcesEmpty" hidden>
+        <p>No sources yet. Ask a question and the sources used for the answer will appear here.</p>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim" hidden></div>
+  </div>
+
+  <!-- Template-only control to switch between static states. Not part of the product UI. -->
+  <div class="demo-bar" role="region" aria-label="Template preview states">
+    <span class="demo-label">Preview state</span>
+    <select id="stateSelect" aria-label="Preview state">
+      <option value="login">Login</option>
+      <option value="login-loading">Login — signing in</option>
+      <option value="login-reset">Login — reset password</option>
+      <option value="welcome">Welcome / new chat</option>
+      <option value="conversation" selected>Active conversation</option>
+      <option value="sources-open">Sources panel open ([2] focused)</option>
+      <option value="loading">Loading / thinking</option>
+      <option value="error">Error presentation</option>
+    </select>
+    <label class="demo-toggle" title="Mock of the future LOCAL_AUTH_ENABLED setting">
+      <input type="checkbox" id="localAuthToggle" />
+      <span>Local auth</span>
+    </label>
+  </div>
+
+  <script src="mock-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

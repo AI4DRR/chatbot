@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reset password — AI4DRR Chatbot</title>
+  <meta name="description" content="Choose a new password for your AI4DRR Chatbot account." />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body data-state="login">
+  <!-- Reached from the reset e-mail: /reset-password#token=…  The token stays in the URL fragment (never
+       sent to the server in the URL); the page validates it with POST /api/auth/reset/check and completes
+       with POST /api/auth/reset, which replaces the password, consumes the link and ends existing sessions.
+       No session is opened: the person signs in with the new password. -->
+  <section class="login setup" aria-labelledby="resetTitle">
+    <div class="login-inner">
+      <h1 class="login-wordmark"><span class="wm-name">AI4DRR</span><span class="wm-product">Chatbot</span></h1>
+
+      <div class="auth-view" id="resetChecking">
+        <p class="login-sub">Checking your reset link…</p>
+      </div>
+
+      <div class="auth-view" id="resetForm" hidden>
+        <h2 class="auth-heading" id="resetTitle">Choose a new password</h2>
+        <p class="login-sub">Set a new password for your AI4DRR Chatbot account.</p>
+        <form class="auth-form" id="form" novalidate>
+          <div class="field field-readonly">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="" readonly aria-readonly="true" />
+          </div>
+          <div class="field">
+            <label for="password">New password <span class="required" aria-hidden="true">*</span></label>
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+            <p class="field-hint">At least 8 characters.</p>
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm new password <span class="required" aria-hidden="true">*</span></label>
+            <input id="confirm" name="confirm_password" type="password" autocomplete="new-password" required />
+          </div>
+          <p class="auth-error" id="error" role="alert" hidden></p>
+          <button class="auth-btn" id="submit" type="submit">
+            <span class="auth-btn-label">Reset password</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Saving…</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-view setup-success" id="resetSuccess" hidden>
+        <div class="check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M5 10.5l3.5 3.5L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2 class="auth-heading">Password updated</h2>
+        <p class="login-sub">Your password has been changed and any other signed-in sessions were ended. Sign in with your new password.</p>
+        <a class="auth-btn" href="/">Go to sign in</a>
+      </div>
+
+      <div class="auth-view setup-success" id="resetInvalid" hidden>
+        <h2 class="auth-heading">This reset link is not valid</h2>
+        <p class="login-sub" id="invalidReason">The link may have expired, been replaced by a newer request, or already been used. Request a new one from the sign-in screen.</p>
+        <a class="auth-btn" href="/">Go to sign in</a>
+      </div>
+    </div>
+    <p class="login-foot">© UNDRR · AI4DRR Chatbot</p>
+  </section>
+
+  <script src="/config.js"></script>
+  <script src="/reset.js"></script>
+</body>
+</html>

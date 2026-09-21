@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin sign in — AI4DRR Chatbot</title>
+  <meta name="description" content="Chatbot Management sign-in for AI4DRR Chatbot administrators." />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body data-state="login" data-local-auth="off">
+  <!-- The management doorway. Same sign-in methods and the same session cookie as the chatbot;
+       after sign-in the page asks GET /api/admin/me — only users.is_admin=true may continue. -->
+  <section class="login admin-login" aria-labelledby="adminLoginTitle">
+    <div class="login-inner">
+      <h1 class="login-wordmark"><span class="wm-name">AI4DRR</span><span class="wm-product">Chatbot</span></h1>
+      <p class="admin-login-area">Chatbot Management</p>
+
+      <!-- State: sign in -->
+      <div class="auth-view" id="authSignIn">
+        <h2 class="auth-heading" id="adminLoginTitle">Admin sign in</h2>
+        <a class="sso-btn" id="ssoBtn" href="/api/auth/entra/login?next=%2Fadmin%2Flogin" role="button" aria-disabled="true">
+          <span class="sso-btn-label">
+            <svg class="ms-glyph" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6.5" height="6.5"/><rect x="10.5" y="3" width="6.5" height="6.5"/><rect x="3" y="10.5" width="6.5" height="6.5"/><rect x="10.5" y="10.5" width="6.5" height="6.5"/></svg>
+            Sign in with Microsoft
+          </span>
+        </a>
+        <p class="login-note" id="ssoNote">Checking available sign-in methods…</p>
+
+        <div class="auth-or" data-local-auth-only role="separator" aria-label="or"><span>or</span></div>
+
+        <form class="auth-form" id="localForm" data-local-auth-only novalidate>
+          <div class="field">
+            <label for="loginEmail">Email address</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="name@example.org" required />
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <p class="auth-error" id="localError" role="alert" hidden></p>
+          <button class="auth-btn" id="localSubmit" type="submit">
+            <span class="auth-btn-label">Sign in</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Signing in…</span>
+          </button>
+          <div class="auth-links">
+            <a href="/">Forgot password?</a>
+          </div>
+        </form>
+
+        <p class="login-note">Only authorized Chatbot administrators can access Chatbot Management.</p>
+        <a class="admin-login-back" href="/">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to AI4DRR Chatbot
+        </a>
+      </div>
+
+      <!-- State: signed in, but not an administrator -->
+      <div class="auth-view setup-success" id="authDenied" hidden>
+        <h2 class="auth-heading">Access denied</h2>
+        <p class="login-sub">You are signed in as <strong id="deniedWho"></strong>, but this account is not a Chatbot administrator. Only authorized Chatbot administrators can access Chatbot Management.</p>
+        <a class="auth-btn" href="/">Back to AI4DRR Chatbot</a>
+        <div class="auth-links"><a href="#" id="deniedSignOut">Sign out</a></div>
+      </div>
+
+      <!-- State: checking / redirecting -->
+      <div class="auth-view" id="authChecking" hidden>
+        <p class="login-sub">Checking your account…</p>
+      </div>
+    </div>
+    <p class="login-foot">© UNDRR · AI4DRR Chatbot</p>
+  </section>
+
+  <script src="/config.js"></script>
+  <script src="/identity.js"></script>
+  <script src="/admin/admin-login.js"></script>
+</body>
+</html>

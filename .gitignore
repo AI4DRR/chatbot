@@ -1,0 +1,44 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Tool caches
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Virtual environments
+.env
+.venv/
+venv/
+ENV/
+
+# =========================
+# Local runtime artifacts
+# =========================
+chat_session/*
+!chat_session/.gitkeep
+logs/*
+!logs/.gitkeep
+*.log
+ai-search.log
+*.eml
+
+# =========================
+# Editor / OS
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+postgres_data/

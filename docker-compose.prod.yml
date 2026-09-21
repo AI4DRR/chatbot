@@ -1,0 +1,88 @@
+# Docker Compose for PRODUCTION
+# Use: docker-compose -f docker-compose.prod.yml up -d
+# 
+# Key differences from development:
+# - Auto-restart on failure (restart: always)
+# - No code reload, no bind mounts (app code comes from the image); 4 workers
+# - API container health check enabled
+# - Resource limits set
+# - DATABASE_URL from .env (not hardcoded) — must use the in-network host `postgres`
+# - Postgres data in a named volume; credentials from DB_* in .env
+# (Neither compose file publishes the database port on the host.)
+
+services:
+  # Application service: V1 frontend at "/" + FastAPI at "/api/*" (one origin)
+  chatbot-app:
+    image: undrr-chatbot:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: undrr-chatbot-prod
+    working_dir: /data
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      # DATABASE_URL automatically loaded from .env
+    volumes:
+      - ./chat_session:/data/chat_session
+      - ./logs:/data/logs
+    ports:
+      - "8000:8000"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+    networks:
+      - undrr-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+  # PostgreSQL with pgvector (Production)
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: undrr-chatbot-postgres-prod
+    environment:
+      POSTGRES_USER: ${DB_USER:-undrr}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-undrrpassword}
+      POSTGRES_DB: ${DB_NAME:-undrr_chat}
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+      - ./postgres_init:/docker-entrypoint-initdb.d
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-undrr}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - undrr-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+volumes:
+  postgres_data_prod:
+    driver: local
+
+networks:
+  undrr-network:
+    driver: bridge

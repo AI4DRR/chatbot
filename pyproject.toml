@@ -1,0 +1,53 @@
+[project]
+name = "undrr-chatbot"
+version = "0.1.0"
+description = "AI4DRR Chatbot backend (FastAPI)"
+requires-python = ">=3.11,<3.12"
+# Runtime dependencies stay in requirements.txt (inherited compatibility
+# baseline — see docs/infrastructure-baseline.md). Dev tooling: requirements-dev.txt.
+
+[tool.ruff]
+target-version = "py311"
+line-length = 110
+src = ["app", "tests"]
+extend-exclude = ["templates", "frontend", "postgres_data", "docs"]
+
+[tool.ruff.lint]
+# E/W pycodestyle, F pyflakes, I isort, UP pyupgrade, B bugbear, N naming,
+# D docstrings (Google style), ANN return types, T20 no print, LOG/G logging, RUF misc.
+select = ["E", "W", "F", "I", "UP", "B", "N", "D", "ANN", "T20", "LOG", "G", "RUF", "SIM", "RET"]
+ignore = [
+  "D100", "D104",       # module/package docstrings are encouraged but not enforced everywhere
+  "D203", "D213",       # conflicting docstring styles; we use D211/D212
+  "ANN401",             # Any is allowed where FastAPI/SDK types force it
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "ANN"]          # tests: names are the documentation
+"app/api/routes/*" = ["B008"]      # FastAPI's Depends() in defaults is idiomatic
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+files = ["app", "tests"]
+strict = true
+warn_unreachable = true
+# Third-party packages without complete stubs; add per-module overrides here as
+# legacy modules are ported (e.g. spacy, azure.search.documents).
+[[tool.mypy.overrides]]
+module = ["spacy.*", "azure.*", "streamlit.*", "plotly.*", "msal.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = ["db: needs PostgreSQL at TEST_DATABASE_URL (skipped otherwise)"]
+filterwarnings = ["error::DeprecationWarning:app.*"]

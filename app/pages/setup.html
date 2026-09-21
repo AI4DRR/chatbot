@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account setup — AI4DRR Chatbot</title>
+  <meta name="description" content="Complete your AI4DRR Chatbot account from your invitation." />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body data-state="login">
+  <!-- Reached from the invitation e-mail: /account-setup#token=…  The token stays in the URL fragment
+       (never sent to the server in the URL); the page validates it with POST /api/auth/setup/check and
+       completes with POST /api/auth/setup, which creates the account, consumes the invitation and signs in. -->
+  <section class="login setup" aria-labelledby="setupTitle">
+    <div class="login-inner">
+      <h1 class="login-wordmark"><span class="wm-name">AI4DRR</span><span class="wm-product">Chatbot</span></h1>
+
+      <div class="auth-view" id="setupChecking">
+        <p class="login-sub">Checking your invitation…</p>
+      </div>
+
+      <div class="auth-view" id="setupForm" hidden>
+        <h2 class="auth-heading" id="setupTitle">Set up your account</h2>
+        <p class="login-sub">You have been invited to the AI4DRR Chatbot. Complete your profile and choose a password to finish.</p>
+        <form class="auth-form" id="form" novalidate>
+          <div class="field field-readonly">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="" readonly aria-readonly="true" />
+            <p class="field-hint">Fixed by your invitation. This will be your sign-in email.</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="firstName">First name <span class="required" aria-hidden="true">*</span></label>
+              <input id="firstName" name="first_name" type="text" autocomplete="given-name" required />
+            </div>
+            <div class="field">
+              <label for="lastName">Last name <span class="required" aria-hidden="true">*</span></label>
+              <input id="lastName" name="last_name" type="text" autocomplete="family-name" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="department">Department <span class="optional">(optional)</span></label>
+            <input id="department" name="department" type="text" autocomplete="organization" placeholder="e.g. UNDRR" />
+          </div>
+          <div class="field">
+            <label for="password">Password <span class="required" aria-hidden="true">*</span></label>
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+            <p class="field-hint">At least 8 characters.</p>
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm password <span class="required" aria-hidden="true">*</span></label>
+            <input id="confirm" name="confirm_password" type="password" autocomplete="new-password" required />
+          </div>
+          <p class="auth-error" id="error" role="alert" hidden></p>
+          <button class="auth-btn" id="submit" type="submit">
+            <span class="auth-btn-label">Complete account setup</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Setting up…</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-view setup-success" id="setupSuccess" hidden>
+        <div class="check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M5 10.5l3.5 3.5L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2 class="auth-heading">Account setup complete</h2>
+        <p class="login-sub">Your AI4DRR Chatbot account is ready.</p>
+        <a class="auth-btn" href="/">Continue to AI4DRR Chatbot</a>
+      </div>
+
+      <div class="auth-view setup-success" id="setupInvalid" hidden>
+        <h2 class="auth-heading">This invitation link is not valid</h2>
+        <p class="login-sub" id="invalidReason">The link may have expired (invitations last 24 hours) or already been used. Ask an AI4DRR Chatbot administrator for a new invitation.</p>
+        <a class="auth-btn" href="/">Go to sign in</a>
+      </div>
+    </div>
+    <p class="login-foot">© UNDRR · AI4DRR Chatbot</p>
+  </section>
+
+  <script src="/config.js"></script>
+  <script src="/setup.js"></script>
+</body>
+</html>

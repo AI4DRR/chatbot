@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin sign in — Chatbot Management (UX template v1)</title>
+  <meta name="description" content="Design template for /admin/login: the Chatbot Management doorway. Same sign-in methods and session model as the chatbot; no separate auth. Mock only." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body data-state="login" data-local-auth="on">
+
+  <!-- Template-only notice. Design target: /admin/login. Same methods (Microsoft primary, local when
+       LOCAL_AUTH_ENABLED), same users / auth_sessions as the normal sign-in — only the doorway differs.
+       Admin authorisation (users.is_admin, /api/admin/*) is a later backend task; nothing is enforced here.
+       Preview: ?local=off hides the local section, as GET /api/auth/config would. -->
+  <div class="tpl-banner" role="note">
+    <strong>Design template.</strong> Admin doorway only — same sign-in as the chatbot; admin authorisation not implemented yet.
+  </div>
+
+  <section class="login admin-login" aria-labelledby="adminLoginTitle">
+    <div class="login-inner">
+      <h1 class="login-wordmark"><span class="wm-name">AI4DRR</span><span class="wm-product">Chatbot</span></h1>
+      <p class="admin-login-area">Chatbot Management</p>
+
+      <div class="auth-view" id="authSignIn">
+        <h2 class="auth-heading" id="adminLoginTitle">Admin sign in</h2>
+        <button class="sso-btn" id="ssoBtn" type="button">
+          <span class="sso-btn-label">
+            <svg class="ms-glyph" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6.5" height="6.5"/><rect x="10.5" y="3" width="6.5" height="6.5"/><rect x="3" y="10.5" width="6.5" height="6.5"/><rect x="10.5" y="10.5" width="6.5" height="6.5"/></svg>
+            Sign in with Microsoft
+          </span>
+          <span class="sso-btn-busy" aria-hidden="true"><i class="spinner"></i> Signing in…</span>
+        </button>
+
+        <div class="auth-or" data-local-auth-only role="separator" aria-label="or"><span>or</span></div>
+
+        <form class="auth-form" id="localForm" data-local-auth-only novalidate>
+          <div class="field">
+            <label for="loginEmail">Email address</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="name@example.org" required />
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <p class="auth-error" id="localError" role="alert" hidden></p>
+          <button class="auth-btn" id="localSubmit" type="submit">
+            <span class="auth-btn-label">Sign in</span>
+            <span class="auth-btn-busy" aria-hidden="true"><i class="spinner"></i> Signing in…</span>
+          </button>
+          <div class="auth-links">
+            <a href="index.html">Forgot password?</a>
+          </div>
+        </form>
+
+        <p class="login-note">Only authorized Chatbot administrators can access Chatbot Management.</p>
+        <a class="admin-login-back" href="index.html">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to AI4DRR Chatbot
+        </a>
+      </div>
+    </div>
+    <p class="login-foot">© UNDRR · AI4DRR Chatbot (preview)</p>
+  </section>
+
+  <script>
+    /* Template-only behaviour: the feature flag comes from the URL instead of GET /api/auth/config, and both
+       sign-in actions only show a busy state, then open the Users template. No request is made. */
+    (function () {
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      if (new URLSearchParams(location.search).get('local') === 'off') document.body.dataset.localAuth = 'off';
+      const go = (btn) => { btn.disabled = true; btn.classList.add('is-busy'); setTimeout(() => { location.href = 'admin-users.html'; }, 900); };
+      $('ssoBtn').addEventListener('click', () => go($('ssoBtn')));
+      $('localForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const f = $('localForm'); const err = $('localError'); err.hidden = true;
+        if (!f.email.value.trim() || !f.email.validity.valid || !f.password.value) { err.textContent = 'Enter your email address and password.'; err.hidden = false; return; }
+        go($('localSubmit'));
+      });
+    })();
+  </script>
+</body>
+</html>
