@@ -1,13 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Datum | AI4DRR</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Project page description goes here.">
+  <meta name="keywords" content="Project, Keywords">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DRR Chatbot</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- Bulma + icons (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    /* ===== Base (from template's index.css) ===== */
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      /* Sticky footer: push footer to the bottom on short pages */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .footer {
+      margin-top: auto;
+    }
+
+    .footer .icon-link {
+      font-size: 25px;
+      color: #000;
+    }
+
+    .link-block a {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .dnerf {
+      font-variant: small-caps;
+    }
+
+    .teaser .hero-body {
+      padding-top: 0;
+      padding-bottom: 3rem;
+    }
+
+    .teaser {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-title,
+    .publication-authors {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-venue {
+      color: #555;
+      width: fit-content;
+      font-weight: bold;
+    }
+
+    .publication-awards {
+      color: #ff3860;
+      width: fit-content;
+      font-weight: bolder;
+    }
+
+    .publication-authors a {
+      color: hsl(204, 86%, 53%) !important;
+    }
+
+    .publication-authors a:hover {
+      text-decoration: underline;
+    }
+
+    .author-block {
+      display: inline-block;
+    }
+
+    .footer-tagline {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.15rem;
+      color: #363636;
+    }
+
+    .footer-legal {
+      font-size: 0.85rem;
+      color: #7a7a7a;
+    }
+
+    /* ===== Tighter vertical spacing ===== */
+    .hero .hero-body {
+      padding-top: 1.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .publication-title {
+      margin-bottom: 1rem !important;
+    }
+
+    .publication-links-column {
+      padding-top: 0.75rem;
+      padding-bottom: 0;
+    }
+
+    .section {
+      padding-top: 1.5rem;
+      padding-bottom: 2rem;
+    }
+
+    .section .title.is-3 {
+      margin-bottom: 1rem;
+    }
+
+    .footer {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .publication-video {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%;
+      overflow: hidden;
+      border-radius: 10px !important;
+    }
+
+    .publication-video iframe,
+    .publication-video .placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ===== Results carousel (simple scroll-snap, no plugin) ===== */
+    .results-carousel {
+      overflow-x: auto;
+      display: flex;
+      gap: 10px;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 8px;
+    }
+
+    .results-carousel .item {
+      flex: 0 0 calc((100% - 20px) / 3);
+      scroll-snap-align: start;
+      overflow: hidden;
+      border: 1px solid #bbb;
+      border-radius: 10px;
+      padding: 0;
+      font-size: 0;
+    }
+
+    @media (max-width: 768px) {
+      .results-carousel .item { flex-basis: 85%; }
+    }
+
+    /* ===== Interpolation panel ===== */
+    .interpolation-panel {
+      background: #f5f5f5;
+      border-radius: 10px;
+    }
+
+    .interpolation-panel .interpolation-image {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .interpolation-panel input[type="range"] {
+      width: 100%;
+      margin: 0.75rem 0 0;
+    }
+
+    #interpolation-image-wrapper {
+      width: 100%;
+    }
+
+    /* ===== Placeholders (replace with real images/videos) ===== */
+    .placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: repeating-linear-gradient(45deg, #e8e8e8, #e8e8e8 12px, #f2f2f2 12px, #f2f2f2 24px);
+      color: #888;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1rem;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .placeholder .icon { margin-right: 0.5rem; }
+    .ph-16x9 { aspect-ratio: 16 / 9; }
+    .ph-4x3  { aspect-ratio: 4 / 3; }
+    .ph-1x1  { aspect-ratio: 1 / 1; }
+    .ph-teaser { aspect-ratio: 16 / 7; }
+  </style>
 </head>
 <body>
-  <h1>Datum</h1>
-  <p>Datum is an LLM-powered conversational data assistant to interrogate disaster-loss data, generate visualisations and provide source citations.</p>
-  <p>It provides faster and more accessible analysis of disaster-loss data, allowing users to obtain grounded answers, charts and supporting evidence without manually constructing database queries.</p>
+
+<!-- ===== Navbar ===== -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://ai4drr.github.io/" title="AI4DRR Home" target="_blank" rel="noopener noreferrer">
+        <span class="icon"><i class="fas fa-home"></i></span>
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">AI4DRR</a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://ai4drr.github.io/Mi-CAT/">Mi-CAT</a>
+          <a class="navbar-item" href="https://ai4drr.github.io/chatbot/">DRR Chatbot</a>
+          <a class="navbar-item" href="https://ai4drr.github.io/fonte/">Fonte</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Title / Authors / Links ===== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DRR Chatbot</h1>
+
+          <div class="column has-text-centered publication-links-column">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://github.com/AI4DRR/chatbot" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Abstract ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            <span class="dnerf">Datum</span> is an LLM-powered conversational data assistant to interrogate
+            disaster-loss data, generate visualisations and provide source citations.
+          </p>
+          <p>
+            It provides faster and more accessible analysis of disaster-loss data, allowing users to obtain grounded
+            answers, charts and supporting evidence without manually constructing database queries.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://github.com/AI4DRR/chatbot" target="_blank" rel="noopener noreferrer" title="Code"><i class="fab fa-github"></i></a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <!-- Tagline hidden for now; remove style to show again -->
+          <p class="footer-tagline" style="display: none;">
+            <span class="dnerf">Datum</span> &mdash; ask questions of disaster-loss data and get grounded,
+            cited answers.
+          </p>
+          <p class="footer-legal">
+            DRR Chatbot is licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>.
+            Feel free to use, modify, and distribute the code making sure to keep the copyright and license notice.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile navbar burger toggle
+  document.querySelectorAll('.navbar-burger').forEach(function (burger) {
+    burger.addEventListener('click', function () {
+      burger.classList.toggle('is-active');
+      document.querySelector('.navbar-menu').classList.toggle('is-active');
+    });
+  });
+</script>
 </body>
 </html>
