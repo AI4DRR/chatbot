@@ -1,5 +1,9 @@
 # Chatbot Pages
 
+Datum is an LLM-powered conversational data assistant for interrogating disaster-loss data. It translates natural-language questions into analyses of the underlying records, generates visualisations, and cites the sources behind every answer, so that each result is grounded and verifiable.
+
+Disaster-loss data records what past disasters have cost, from lives lost to homes destroyed and economic damage. Exploring it has usually required technical skills to write database queries. With Datum, anyone can simply ask a question, such as how flood losses have changed over time, and get an answer, a chart and the evidence to back it up.
+
 This repository contains the source files for the public AI4DRR Chatbot website:
 
 https://ai4drr.github.io/chatbot/
