@@ -1,8 +1,8 @@
 # Chatbot Pages
 
-Datum is an LLM-powered conversational data assistant for interrogating disaster-loss data. It translates natural-language questions into analyses of the underlying records, generates visualisations, and cites the sources behind every answer, so that each result is grounded and verifiable.
+DRR Chatbot is an LLM-powered conversational assistant for disaster risk reduction. The longer-term aim is to let users interrogate disaster-loss data, generate visualisations and get source-cited answers without writing database queries. The current version answers questions from the UNDRR knowledge base, with every answer grounded in retrieved documents and backed by citations.
 
-Disaster-loss data records what past disasters have cost, from lives lost to homes destroyed and economic damage. Exploring it has usually required technical skills to write database queries. With Datum, anyone can simply ask a question, such as how flood losses have changed over time, and get an answer, a chart and the evidence to back it up.
+Disaster risk information is spread across large collections that take time and expertise to search. DRR Chatbot lets anyone ask a question in everyday language and get a direct answer that points back to its sources, so every answer can be checked.
 
 This repository contains the source files for the public AI4DRR Chatbot website:
 
